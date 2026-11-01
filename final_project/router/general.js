@@ -72,13 +72,20 @@ public_users.get('/author/:author',function (req, res) {
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  // Extract the title parameter from the request URL
-  const title = req.params.title;
-  // Filter the books array to find books whose title matches the extracted title parameter - NOTE: books is an object and has to be filtered differently
-  let filtered_title = Object.values(books).filter((book) => book.title === title);
-  // Send the filtered_title array as the response to the client
-  res.send(filtered_title);
+    //Write your code here
+    let getBooksByTitlePromise = new Promise((resolve,reject) => {
+        // Extract the title parameter from the request URL
+        const title = req.params.title;
+        // Filter the books array to find books whose title matches the extracted title parameter - NOTE: books is an object and has to be filtered differently
+        let filtered_title = Object.values(books).filter((book) => book.title === title);
+        // Send the filtered_title array as the response to the client
+        resolve(res.send(filtered_title))})
+    
+    //Call the promise, wait for it to be resolved and then print a message.
+    getBooksByTitlePromise.then((successMessage) => {
+        console.log("From Callback " + successMessage)
+        console.log("Promise resolved");
+    })
 });
 
 //  Get book review
