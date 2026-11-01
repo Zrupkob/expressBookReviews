@@ -29,7 +29,7 @@ public_users.get('/author/:author',function (req, res) {
   // Extract the author parameter from the request URL
   const author = req.params.author;
   // Filter the books array to find books whose author matches the extracted author parameter
-  let filtered_author = books.filter((book) => book.author === author);
+  let filtered_author = Object.values(books).filter((book) => book.author === author);
   // Send the filtered_author array as the response to the client
   res.send(filtered_author);
 });
