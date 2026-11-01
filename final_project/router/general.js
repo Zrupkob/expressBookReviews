@@ -40,10 +40,17 @@ public_users.get('/',function (req, res) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  const isbn = req.params.isbn;
-  res.send(books[isbn]);
- });
+    //Write your code here
+    let getBooksByISBNPromise = new Promise((resolve,reject) => {
+        const isbn = req.params.isbn;
+        resolve(res.send(books[isbn]))})
+
+    //Call the promise, wait for it to be resolved and then print a message.
+    getBooksByISBNPromise.then((successMessage) => {
+        console.log("From Callback " + successMessage)
+        console.log("Promise resolved");
+    })
+});
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
