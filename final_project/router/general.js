@@ -28,11 +28,11 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
     //Write your code here
-    let myPromise = new Promise((resolve,reject) => {
+    let getAllBooksPromise = new Promise((resolve,reject) => {
         resolve(res.send(JSON.stringify({books}, null, 4)))})
 
-    //Call the promise and wait for it to be resolved and then print a message.
-    myPromise.then((successMessage) => {
+    //Call the promise, wait for it to be resolved and then print a message.
+    getAllBooksPromise.then((successMessage) => {
         console.log("From Callback " + successMessage)
         console.log("Promise resolved");
     })
