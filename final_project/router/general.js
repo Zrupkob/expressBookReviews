@@ -26,66 +26,65 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-    //Write your code here
-    let getAllBooksPromise = new Promise((resolve,reject) => {
-        resolve(res.send(JSON.stringify({books}, null, 4)))})
+public_users.get('/', async function (req, res) {
+    const url = 'http://localhost:5000/books';
+        try {
+            const response = await axios.get(url);
+            res.json(response.data);
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+            res.status(500).json({ message: 'Error fetching data' });
+        }
+});
 
-    //Call the promise, wait for it to be resolved and then print a message.
-    getAllBooksPromise.then((successMessage) => {
-        console.log("From Callback " + successMessage)
-        console.log("Promise resolved");
-    })
+public_users.get('/books', function (req, res) {
+    res.json(books);
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-    //Write your code here
-    let getBooksByISBNPromise = new Promise((resolve,reject) => {
+public_users.get('/isbn/:isbn',async function (req, res) {
+    const url = 'http://localhost:5000/books'
+    try {
         const isbn = req.params.isbn;
-        resolve(res.send(books[isbn]))})
-
-    //Call the promise, wait for it to be resolved and then print a message.
-    getBooksByISBNPromise.then((successMessage) => {
-        console.log("From Callback " + successMessage)
-        console.log("Promise resolved");
-    })
+        const response = await axios.get(url);
+        fetchedData = response.data;
+        filteredData = fetchedData[isbn];
+        res.send(filteredData);
+    } catch (error) {
+        console.error('Error fetching data: ', error);
+        res.status(500).json({ message: 'Error fetching data' });
+    }
 });
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-    //Write your code here
-    let getBooksByAuthorPromise = new Promise((resolve,reject) => {
-        // Extract the author parameter from the request URL
+public_users.get('/author/:author',async function (req, res) {
+    const url = 'http://localhost:5000/books'
+    try {
         const author = req.params.author;
-        // Filter the books array to find books whose author matches the extracted author parameter - NOTE: books is an object and has to be filtered differently
-        let filtered_author = Object.values(books).filter((book) => book.author === author);
-        // Send the filtered_author array as the response to the client
-        resolve(res.send(filtered_author))})
-
-    //Call the promise, wait for it to be resolved and then print a message.
-    getBooksByAuthorPromise.then((successMessage) => {
-        console.log("From Callback " + successMessage)
-        console.log("Promise resolved");
-    })
+        const response = await axios.get(url);
+        fetchedData = response.data;
+        filteredData = Object.values(fetchedData).filter((book) => book.author === author);
+        res.send(filteredData);
+    } catch (error) {
+        console.error('Error fetching data: ', error);
+        res.status(500).json({ message: 'Error fetching data' });
+    }
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
-    //Write your code here
-    let getBooksByTitlePromise = new Promise((resolve,reject) => {
-        // Extract the title parameter from the request URL
+public_users.get('/title/:title',async function (req, res) {
+    const url = 'http://localhost:5000/books'
+    try {
         const title = req.params.title;
-        // Filter the books array to find books whose title matches the extracted title parameter - NOTE: books is an object and has to be filtered differently
-        let filtered_title = Object.values(books).filter((book) => book.title === title);
-        // Send the filtered_title array as the response to the client
-        resolve(res.send(filtered_title))})
-    
-    //Call the promise, wait for it to be resolved and then print a message.
-    getBooksByTitlePromise.then((successMessage) => {
-        console.log("From Callback " + successMessage)
-        console.log("Promise resolved");
-    })
+        const response = await axios.get(url);
+        fetchedData = response.data;
+        filteredData = Object.values(fetchedData).filter((book) => book.title === title);
+        res.send(filteredData);
+    } catch (error) {
+        console.error('Error fetching data: ', error);
+        res.status(500).json({ message: 'Error fetching data' });
+    }
 });
 
 //  Get book review
