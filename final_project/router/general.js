@@ -30,8 +30,12 @@ public_users.get('/', async function (req, res) {
     const url = 'http://localhost:5000/books';
         try {
             const response = await axios.get(url);
-            res.json(response.data);
-            console.log(response.data);
+            if (response.data) {
+                res.json(response.data);
+                console.log(response.data);
+            } else {
+                res.status(404).json({ message: 'Error: data not found: ' });
+            }
         } catch (error) {
             console.error('Error fetching data: ', error);
             res.status(500).json({ message: 'Error fetching data' });
@@ -50,7 +54,11 @@ public_users.get('/isbn/:isbn',async function (req, res) {
         const response = await axios.get(url);
         fetchedData = response.data;
         filteredData = fetchedData[isbn];
-        res.send(filteredData);
+        if (filteredData){
+            res.send(filteredData);
+        } else {
+            res.status(404).json({ message: 'Error: data not found: ' });
+        }
     } catch (error) {
         console.error('Error fetching data: ', error);
         res.status(500).json({ message: 'Error fetching data' });
@@ -65,7 +73,11 @@ public_users.get('/author/:author',async function (req, res) {
         const response = await axios.get(url);
         fetchedData = response.data;
         filteredData = Object.values(fetchedData).filter((book) => book.author === author);
-        res.send(filteredData);
+        if (filteredData && filteredData.length){
+            res.send(filteredData);
+        } else {
+            res.status(404).json({ message: 'Error: data not found: ' });
+        }
     } catch (error) {
         console.error('Error fetching data: ', error);
         res.status(500).json({ message: 'Error fetching data' });
@@ -80,7 +92,11 @@ public_users.get('/title/:title',async function (req, res) {
         const response = await axios.get(url);
         fetchedData = response.data;
         filteredData = Object.values(fetchedData).filter((book) => book.title === title);
-        res.send(filteredData);
+        if (filteredData && filteredData.length){
+            res.send(filteredData);
+        } else {
+            res.status(404).json({ message: 'Error: data not found: ' });
+        }
     } catch (error) {
         console.error('Error fetching data: ', error);
         res.status(500).json({ message: 'Error fetching data' });
