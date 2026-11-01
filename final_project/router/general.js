@@ -3,6 +3,7 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios').default;
 
 public_users.post("/register", (req,res) => {
   //Write your code here
@@ -26,8 +27,15 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-  res.send(JSON.stringify({books}, null, 4));
+    //Write your code here
+    let myPromise = new Promise((resolve,reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 4)))})
+
+    //Call the promise and wait for it to be resolved and then print a message.
+    myPromise.then((successMessage) => {
+        console.log("From Callback " + successMessage)
+        console.log("Promise resolved");
+    })
 });
 
 // Get book details based on ISBN
