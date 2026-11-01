@@ -70,7 +70,6 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     let reviewtext = req.query.review; // Retrieve review text from query
 
     if (book) {  // Check if book exists
-
         // Update review if provided in request query
         if (postingusername && reviewtext) {
             book.reviews[postingusername] = reviewtext;
@@ -79,6 +78,29 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
         } else {
             // Respond if user or review text is not found
             res.send("No review text or no username found!");
+        }
+    } else {
+        // Respond if book with specified isbn is not found
+        res.send("Unable to find book!");
+    }
+});
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+    const isbn = req.params.isbn; // Extract isbn parameter from request URL
+    const postingusername = req.session.authorization.username; // Retrieve username from session
+    let book = books[isbn];  // Retrieve book object associated with isbn
+
+    if (book) {  // Check if book exists
+        // Delete review if user and matching review exists
+        if (postingusername && book.reviews[postingusername]) {
+            delete book.reviews[postingusername];
+            books[isbn] = book;  // Update book details in 'books' object
+            res.send(`Book review by user ${postingusername} with isbn ${isbn} deleted.`);
+        } else {
+            // Respond if user or review text is not found
+            res.send("No review or no username found!");
         }
     } else {
         // Respond if book with specified isbn is not found
